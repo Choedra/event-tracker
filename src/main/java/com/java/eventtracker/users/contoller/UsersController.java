@@ -26,5 +26,11 @@ public class UsersController {
         return usersService.findById(id);
     }
 
+    // Delete user by ID
+    @DeleteMapping("/{id}")
+    public String deleteUserById(@PathVariable Long id) {
+        usersService.deleteById(id);
+        return "User with ID " + id + " has been deleted successfully.";
+    }
 
 }
