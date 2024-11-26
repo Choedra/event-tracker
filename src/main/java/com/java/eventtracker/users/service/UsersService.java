@@ -24,11 +24,6 @@ public class UsersService implements IUsersService{
         return usersRepository.save(users);
     }
 
-    @Override
-    public Users findById(long id) throws Exception {
-        return usersRepository.findById(id)
-                .orElseThrow(()->new Exception(UserConstants.NOT_FOUND));
-    }
 
     @Override
     public String update(@NonNull Users users) {
@@ -41,5 +36,12 @@ public class UsersService implements IUsersService{
 
         usersRepository.deleteById(id);
         return UserConstants.DELETE_SUCCESSFUL;
+    }
+
+    //get by id
+    @Override
+    public Users findById(long id) throws Exception {
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new Exception(UserConstants.NOT_FOUND));
     }
 }
