@@ -31,17 +31,20 @@ public class UsersService implements IUsersService{
         return UserConstants.UPDATE_SUCCESSFUL;
     }
 
-    @Override
-    public String deleteById(long id) {
-
-        usersRepository.deleteById(id);
-        return UserConstants.DELETE_SUCCESSFUL;
-    }
-
     //get by id
     @Override
     public Users findById(long id) throws Exception {
         return usersRepository.findById(id)
                 .orElseThrow(() -> new Exception(UserConstants.NOT_FOUND));
+    }
+
+    @Override
+    public String deleteById(long id) {
+        if (usersRepository.existsById(id)) {
+            usersRepository.deleteById(id);
+            return UserConstants.DELETE_SUCCESSFUL;
+        } else {
+            return UserConstants.NOT_FOUND;
+        }
     }
 }
