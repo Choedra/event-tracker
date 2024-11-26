@@ -27,8 +27,12 @@ public class UsersService implements IUsersService{
 
     @Override
     public String update(@NonNull Users users) {
-        usersRepository.save(users);
-        return UserConstants.UPDATE_SUCCESSFUL;
+        if (usersRepository.existsById(users.getId())) {
+            usersRepository.save(users);
+            return UserConstants.UPDATE_SUCCESSFUL;
+        } else {
+            return UserConstants.NOT_FOUND;
+        }
     }
 
     //get by id
