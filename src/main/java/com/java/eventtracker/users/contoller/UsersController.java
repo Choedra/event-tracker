@@ -4,6 +4,7 @@ package com.java.eventtracker.users.contoller;
 import com.java.eventtracker.constants.UserConstants;
 import com.java.eventtracker.users.model.Users;
 import com.java.eventtracker.users.service.UsersService;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UsersController {
     private UsersService usersService;
 
     @PostMapping
-    public Users saveUsers(@Validated @RequestBody Users users)
+    public Users saveUsers(@Valid @RequestBody Users users)
     {
         return usersService.save(users);
     }
@@ -45,7 +46,7 @@ public class UsersController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody @NonNull Users users) {
+    public ResponseEntity<String> updateUser(@Valid @RequestBody @NonNull Users users) {
         //Call the update method
         usersService.save(users);
         return  ResponseEntity.ok(UserConstants.UPDATE_SUCCESSFUL);
