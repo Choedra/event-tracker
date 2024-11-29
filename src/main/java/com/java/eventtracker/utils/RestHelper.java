@@ -1,4 +1,4 @@
-package com.company.coursemanager.utils;
+package com.java.eventtracker.utils;
 
 import org.springframework.http.ResponseEntity;
 

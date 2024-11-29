@@ -1,4 +1,4 @@
-package com.company.coursemanager.utils;
+package com.java.eventtracker.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
