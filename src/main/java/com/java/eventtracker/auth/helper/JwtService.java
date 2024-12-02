@@ -78,7 +78,7 @@ public class JwtService {
     public Date extractExpiration(String token) { return extractClaim(token, Claims::getExpiration); }
 
     /**
-     * Extraxt a claim from the token
+     * Extract a claim from the token
      *
      * @param token The token supplied
      * @param claimsResolver The claim resolver use to resolve claims.
@@ -115,7 +115,8 @@ public class JwtService {
      * Validate the token against user details and expiration
      *
      * @param token The token supplied
-     * @param userDetails The details of the uesr.
+     * @param userDetails The details of the user.
+
      * @return The flag indicating whether the token is valid or not.
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
