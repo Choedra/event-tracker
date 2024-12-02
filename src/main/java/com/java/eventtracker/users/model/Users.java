@@ -1,11 +1,7 @@
 package com.java.eventtracker.users.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -34,6 +30,7 @@ public class Users {
     @NotBlank(message = "Password is mandatory")
     @Size(min = 6, message = "Password must be 6 characters long!")
     private String password;
+    private String roles;
 
     public Long getId() {
         return id;
