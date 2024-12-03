@@ -27,7 +27,7 @@ public class JwtService {
      * Generate token with given username
      *
      * @param username The username i.e. email of the signing user.
-     * @return The access taken for the authenticated user.
+     * @return The access token for the authenticated user.
      */
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -67,7 +67,9 @@ public class JwtService {
      * @param token The token supplied
      * @return The username i.e. email of the authenticated token.
      */
-    public String extractUsername(String token) { return extractClaim(token, Claims::getSubject); }
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
     /**
      * Extract the expiration date from the token
@@ -75,13 +77,15 @@ public class JwtService {
      * @param token The token supplied
      * @return The expiration date for the token.
      */
-    public Date extractExpiration(String token) { return extractClaim(token, Claims::getExpiration); }
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 
     /**
-     * Extraxt a claim from the token
+     * Extract a claim from the token
      *
      * @param token The token supplied
-     * @param claimsResolver The claim resolver use to resolve claims.
+     * @param claimsResolver The claim resolver used to resolve claims.
      * @return The claim type resolved and its value.
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -92,30 +96,32 @@ public class JwtService {
     /**
      * Extract all claims from the token
      *
-     * @param token The token applied
+     * @param token The token supplied
      * @return The claims of authenticated user.
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
     /**
-     * Checks if the toke is expired
+     *  Checks if the token is expired
      *
      * @param token The token supplied
      * @return The flag indicating whether the token is expired or not.
      */
-    private Boolean isTokenExpired(String token) { return extractExpiration(token).before(new Date()); }
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
 
     /**
      * Validate the token against user details and expiration
      *
      * @param token The token supplied
-     * @param userDetails The details of the uesr.
+     * @param userDetails The details of the user.
      * @return The flag indicating whether the token is valid or not.
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
