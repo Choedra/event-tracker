@@ -38,7 +38,7 @@ public class  UsersController {
 
     // Get user by ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('INSTRUCTOR')")
+    @PreAuthorize("hasAuthority('USER')")
     public Users getUserById(@PathVariable Long id) throws Exception {
         return usersService.findById(id);
     }
