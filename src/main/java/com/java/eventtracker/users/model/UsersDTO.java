@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsersDTO {
     private long id;
-    private String name;
-    private String address;
-    private String country;
-    private boolean isFullTimer;
-    private Long courseId;
+    private String username;
     private String email;
+    private String password;
     private String roles;
 }

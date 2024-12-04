@@ -1,4 +1,4 @@
-package com.java.eventtracker.exception;
+package com.java.eventtracker.utils.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ package com.java.eventtracker.auth.service;
 import com.java.eventtracker.auth.helper.JwtService;
 import com.java.eventtracker.auth.helper.UserInfoService;
 import com.java.eventtracker.auth.model.AuthRequest;
-import com.java.eventtracker.exception.GlobalExceptionWrapper;
+import com.java.eventtracker.utils.exception.GlobalExceptionWrapper;
 import io.micrometer.common.lang.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

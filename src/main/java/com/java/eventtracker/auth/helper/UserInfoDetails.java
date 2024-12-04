@@ -11,10 +11,15 @@ import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
 
-    private final String email;
-    private final String password;
-    private final List<GrantedAuthority> authorities;
+    private String email;
+    private String password;
+    private List<GrantedAuthority> authorities;
 
+    /**
+     * Initializes the parameterized constructor
+     *
+     * @param userInfo The user info of the user.
+     */
     public UserInfoDetails(Users userInfo) {
         this.email = userInfo.getEmail();
         this.password = userInfo.getPassword();

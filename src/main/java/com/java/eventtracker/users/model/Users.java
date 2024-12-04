@@ -19,6 +19,10 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotBlank
+    @Size(min = 3, message = "Username must be 3 characters long!")
+    private String username;
+
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
     private String email;
@@ -26,6 +30,7 @@ public class Users {
     @NotBlank(message = "Password is mandatory")
     @Size(min = 6, message = "Password must be 6 characters long!")
     private String password;
+
     private String roles;
 
     public Long getId() {

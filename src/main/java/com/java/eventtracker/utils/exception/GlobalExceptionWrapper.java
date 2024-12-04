@@ -1,4 +1,4 @@
-package com.java.eventtracker.exception;
+package com.java.eventtracker.utils.exception;
 
 import com.java.eventtracker.utils.RestResponse;
 import lombok.Getter;
