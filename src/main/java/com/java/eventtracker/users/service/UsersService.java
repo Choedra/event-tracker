@@ -1,5 +1,6 @@
 package com.java.eventtracker.users.service;
 
+import com.java.eventtracker.Auth.helper.UserInfoDetails;
 import com.java.eventtracker.users.mapper.UsersMapper;
 import com.java.eventtracker.utils.constants.UserConstants;
 import com.java.eventtracker.users.model.Users;
@@ -8,10 +9,13 @@ import com.java.eventtracker.users.repository.UsersRepository;
 import com.java.eventtracker.utils.exception.GlobalExceptionWrapper;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.java.eventtracker.utils.constants.UserConstants.*;
 
@@ -64,6 +68,14 @@ public class UsersService implements IUsersService{
 
     @Override
     public UsersDTO fetchSelfInfo() {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((UserInfoDetails) authentication.getPrincipal()).getUsername();
+        return  findByEmail(email).orElseThrow(
+                () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE, USERS.toLowerCase())));
+    }
+
+    public Optional<UsersDTO> findByEmail(@NonNull String emailId) {
+        Optional<Users> user = this.usersRepository.findByEmail(emailId);
+        return UsersMapper.toDTO(user);
     }
 }

@@ -55,4 +55,16 @@ public class UsersController {
         return "User with ID " + id + " has been deleted successfully.";
     }
 
+    /**
+     * Fetch self info of the instructor
+     *
+     * @return The details of the authenticated user.
+     */
+    @GetMapping("/self")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    public ResponseEntity<RestResponse> fetchSelfInfo() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("users", usersService.fetchSelfInfo());
+        return RestHelper.responseSuccess(listHashMap);
+    }
 }
