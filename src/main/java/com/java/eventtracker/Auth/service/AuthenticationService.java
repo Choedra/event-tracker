@@ -4,6 +4,7 @@ import com.java.eventtracker.Auth.helper.JwtService;
 import com.java.eventtracker.Auth.helper.UserInfoService;
 import com.java.eventtracker.Auth.model.AuthRequest;
 import com.java.eventtracker.utils.exception.GlobalExceptionWrapper;
+import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,7 @@ import java.util.HashMap;
 @Service
 public class AuthenticationService {
 
+    @Autowired
     private UserInfoService userInfoService;
 
     @Autowired
@@ -60,7 +62,10 @@ public class AuthenticationService {
         UserDetails userDetails = userInfoService.loadUserByUsername(username);
 
         if (jwtService.validateToken(refreshToken, userDetails)) {
-            return generateTokens(username);
+            HashMap<String, String> tokens = generateTokens(username);
+            // omit refreshing of refresh tokens
+            tokens.put("refreshToken", refreshToken);
+            return tokens;
         } else {
             throw new GlobalExceptionWrapper.BadRequestException("Invalid or Expired Refresh Token.");
         }
@@ -74,8 +79,9 @@ public class AuthenticationService {
      */
     private boolean isRefreshToken(String token) {
         try {
-            Date expiration = jwtService.extractExpiration(token);
-            return expiration.getTime() == jwtService.getRefreshTokenExpiration();
+            Claims claims = jwtService.extractAllClaims(token);
+            // Check for a custom claim or another identifier for refresh tokens
+            return claims.containsKey("type") && "refresh".equals(claims.get("type"));
         } catch (Exception e) {
             return false;
         }
