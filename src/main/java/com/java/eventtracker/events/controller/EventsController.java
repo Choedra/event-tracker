@@ -47,4 +47,28 @@ public class EventsController {
             return RestHelper.responseError("Error saving event: " + e.getMessage());
         }
     }
+    /**
+     * Deletes an event by its ID.
+     *
+     * @param eventId The ID of the event to delete.
+     * @return A response indicating success or failure.
+     */
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<RestResponse> deleteEvent(@PathVariable Long eventId) {
+        try {
+            // Delete the event
+            eventService.deleteEvent(eventId);
+
+            // Prepare the response as a Map
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("message", "Event deleted successfully.");
+
+            return RestHelper.responseSuccess(response);
+        } catch (IllegalArgumentException e) {
+            return RestHelper.responseError(e.getMessage());
+        } catch (Exception e) {
+            return RestHelper.responseError("Error deleting event: " + e.getMessage());
+        }
+    }
+
 }
