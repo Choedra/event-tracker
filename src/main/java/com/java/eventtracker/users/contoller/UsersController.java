@@ -41,7 +41,7 @@ public class UsersController {
      */
     // Get user by ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<RestResponse> findById(@PathVariable long id) {
         HashMap<String, Object> listHashMap = new HashMap<>();
         listHashMap.put("users", usersService.findById(id));
