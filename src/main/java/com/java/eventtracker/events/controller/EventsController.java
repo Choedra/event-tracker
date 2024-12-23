@@ -71,4 +71,28 @@ public class EventsController {
         }
     }
 
+    /**
+     * Retrieves an event by its ID.
+     *
+     * @param eventId The ID of the event to retrieve.
+     * @return The event details as a response.
+     */
+    @GetMapping("/{eventId}")
+    public ResponseEntity<RestResponse> findEventById(@PathVariable Long eventId) {
+        try {
+            // Retrieve the event
+            Events event = eventService.findEventById(eventId);
+
+            // Prepare the response
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("event", event);
+
+            return RestHelper.responseSuccess(response);
+        } catch (IllegalArgumentException e) {
+            return RestHelper.responseError(e.getMessage());
+        } catch (Exception e) {
+            return RestHelper.responseError("Error retrieving event: " + e.getMessage());
+        }
+    }
+
 }

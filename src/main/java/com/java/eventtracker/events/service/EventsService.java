@@ -34,6 +34,8 @@ public class EventsService {
         // Save and return the event
         return eventRepository.save(events);
     }
+
+
     public void deleteEvent(Long eventId) {
         // Check if the event exists
         Events event = eventRepository.findById(eventId)
@@ -42,4 +44,17 @@ public class EventsService {
         // Delete the event
         eventRepository.delete(event);
     }
+
+
+    /**
+     * Finds an event by its ID.
+     *
+     * @param eventId The ID of the event to find.
+     * @return The found event.
+     */
+    public Events findEventById(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
+    }
+
 }
