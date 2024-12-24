@@ -2,8 +2,11 @@ package com.java.eventtracker.events.controller;
 
 import com.java.eventtracker.events.model.Events;
 import com.java.eventtracker.events.service.EventsService;
+import com.java.eventtracker.users.service.IUsersService;
+import com.java.eventtracker.users.service.UsersService;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,27 +17,22 @@ import java.util.HashMap;
 @RequestMapping("/api/v1/events")
 public class EventsController {
 
-    private final EventsService eventService;
-
-    public EventsController(EventsService eventService) {
-        this.eventService = eventService;
-    }
+    @Autowired
+    private EventsService eventService;
 
     /**
      * Creates a new event for a specific user on a selected day.
      *
      * @param events  The event details to be saved.
-     * @param userId  The ID of the user to associate with the event.
      * @return The saved event details as a response.
      */
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<RestResponse> saveEvent(
-            @Validated @RequestBody Events events,
-            @PathVariable Long userId) {
+            @Validated @RequestBody Events events) {
 
         try {
             // Save the event
-            Events savedEvent = eventService.saveEvent(events, userId);
+            Events savedEvent = eventService.saveEvent(events);
 
             // Prepare the response
             HashMap<String, Object> response = new HashMap<>();
