@@ -18,7 +18,7 @@ public class EventsDTO {
 
     private String title; // Title of the event
     private String description; // Description of the event
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime eventDate; // Date and time of the event
 
     private long userId; // User associated with the event
