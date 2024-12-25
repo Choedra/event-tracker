@@ -3,6 +3,9 @@ package com.java.eventtracker.Auth.service;
 import com.java.eventtracker.Auth.helper.JwtService;
 import com.java.eventtracker.Auth.helper.UserInfoService;
 import com.java.eventtracker.Auth.model.AuthRequest;
+import com.java.eventtracker.users.model.User;
+import com.java.eventtracker.users.model.UserDTO;
+import com.java.eventtracker.users.service.UserServiceImpl;
 import com.java.eventtracker.utils.exception.GlobalExceptionWrapper;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
@@ -12,13 +15,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
-public class AuthenticationService {
+public class AuthenticationServiceImpl {
 
     @Autowired
     private UserInfoService userInfoService;
@@ -27,7 +32,10 @@ public class AuthenticationService {
     private JwtService jwtService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     /**
      * Authenticates the user provided credentials.
@@ -35,21 +43,21 @@ public class AuthenticationService {
      * @param authRequest The user provided credentials.
      * @return The token on validating the user.
      */
-    public HashMap<String, String> authenticate(@NonNull AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
-        );
-        if (authentication.isAuthenticated()) {
-            HashMap<String, String> tokenMap = new HashMap<>();
-            tokenMap.put("access_token", jwtService.generateToken(authRequest.getEmail()));
-            tokenMap.put("refresh_token", jwtService.generateRefreshToken(authRequest.getEmail()));
-            return tokenMap;
-        } else {
-            throw new GlobalExceptionWrapper.BadRequestException("Invalid Credentials.");
+    public Map<String, String> authenticate(@NonNull AuthRequest authRequest) {
+        Optional<User> selectedUser = userServiceImpl.findByEmail(authRequest.getEmail());
+        if (selectedUser.isEmpty() || !encoder.matches(authRequest.getPassword(), selectedUser.get().getPassword())) {
+            throw new GlobalExceptionWrapper.NotFoundException("Invalid Credentials.");
         }
+        return generateTokens(authRequest.getEmail());
     }
 
-    public HashMap<String, String> refreshToken(String refreshToken) {
+    /**
+     * The updated access tokens from the refresh token provided.
+     *
+     * @param refreshToken The refresh tokens.
+     * @return The map of access and refresh tokens.
+     */
+    public Map<String, String> refreshToken(String refreshToken) {
         // Check if token is a refresh token
         if (!isRefreshToken(refreshToken)) {
             throw new GlobalExceptionWrapper.BadRequestException("Invalid Refresh Token.");
@@ -62,8 +70,8 @@ public class AuthenticationService {
         UserDetails userDetails = userInfoService.loadUserByUsername(username);
 
         if (jwtService.validateToken(refreshToken, userDetails)) {
-            HashMap<String, String> tokens = generateTokens(username);
-            // omit refreshing of refresh tokens
+            Map<String, String> tokens = generateTokens(username);
+            //Omit refreshing of refresh tokens
             tokens.put("refreshToken", refreshToken);
             return tokens;
         } else {
@@ -87,10 +95,17 @@ public class AuthenticationService {
         }
     }
 
-    private HashMap<String, String> generateTokens(String username) {
-        HashMap<String, String> tokenMap = new HashMap<>();
+    /**
+     * Generates the token for provided username.
+     *
+     * @param username The username for the provided token.
+     * @return The map of token types and tokens.
+     */
+    private Map<String, String> generateTokens(String username) {
+        Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("accessToken", jwtService.generateToken(username));
         tokenMap.put("refreshToken", jwtService.generateRefreshToken(username));
         return tokenMap;
     }
+
 }

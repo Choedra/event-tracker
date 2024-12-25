@@ -4,9 +4,9 @@ import com.java.eventtracker.events.mapper.EventsMapper;
 import com.java.eventtracker.events.model.Events;
 import com.java.eventtracker.events.model.EventsDTO;
 import com.java.eventtracker.events.repository.EventsRepository;
-import com.java.eventtracker.users.mapper.UsersMapper;
+import com.java.eventtracker.users.mapper.UserMapper;
 import com.java.eventtracker.users.model.UserDTO;
-import com.java.eventtracker.users.service.IUsersService;
+import com.java.eventtracker.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class EventsService implements IEventService{
     private EventsRepository eventRepository;
 
     @Autowired
-    private IUsersService usersService;
+    private UserService usersService;
 
     @Override
     public List<EventsDTO> findAll() {
@@ -33,7 +33,7 @@ public class EventsService implements IEventService{
         UserDTO user = usersService.fetchSelfInfo();
 
         // Associate the event with the user
-        events.setUsers(UsersMapper.toEntity(user));
+        events.setUsers(UserMapper.toEntity(user));
 
         // Save and return the event
         Events savedEvents = eventRepository.save(events);
