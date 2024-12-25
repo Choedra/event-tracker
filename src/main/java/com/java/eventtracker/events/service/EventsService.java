@@ -1,22 +1,19 @@
 package com.java.eventtracker.events.service;
 
+import com.java.eventtracker.events.mapper.EventsMapper;
 import com.java.eventtracker.events.model.Events;
+import com.java.eventtracker.events.model.EventsDTO;
 import com.java.eventtracker.events.repository.EventsRepository;
 import com.java.eventtracker.users.mapper.UsersMapper;
-import com.java.eventtracker.users.model.Users;
-import com.java.eventtracker.users.model.UsersDTO;
-import com.java.eventtracker.users.repository.UsersRepository;
+import com.java.eventtracker.users.model.UserDTO;
 import com.java.eventtracker.users.service.IUsersService;
-import com.java.eventtracker.users.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
-public class EventsService {
+public class EventsService implements IEventService{
 
     @Autowired
     private EventsRepository eventRepository;
@@ -24,37 +21,40 @@ public class EventsService {
     @Autowired
     private IUsersService usersService;
 
-    public Events saveEvent(Events events) {
-        // Fetch the user
-        UsersDTO user = usersService.fetchSelfInfo();
+    @Override
+    public List<EventsDTO> findAll() {
+        UserDTO authenticatedUser = usersService.fetchSelfInfo();
+        List<Events> events = eventRepository.findByUserId(authenticatedUser.getId());
+        return EventsMapper.toDTO(events);
+    }
+
+    @Override
+    public EventsDTO save(Events events) {
+        UserDTO user = usersService.fetchSelfInfo();
 
         // Associate the event with the user
         events.setUsers(UsersMapper.toEntity(user));
 
         // Save and return the event
-        return eventRepository.save(events);
+        Events savedEvents = eventRepository.save(events);
+        return EventsMapper.toDTO(savedEvents);
     }
 
-
-    public void deleteEvent(Long eventId) {
-        // Check if the event exists
-        Events event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
-
-        // Delete the event
-        eventRepository.delete(event);
+    @Override
+    public EventsDTO findById(long id) {
+        Events events = eventRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + id));
+        return EventsMapper.toDTO(events);
     }
 
-
-    /**
-     * Finds an event by its ID.
-     *
-     * @param eventId The ID of the event to find.
-     * @return The found event.
-     */
-    public Events findEventById(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + eventId));
+    @Override
+    public String update(long id, Events entity) {
+        return "";
     }
 
+    @Override
+    public String deleteById(long id) {
+        eventRepository.deleteById(id);
+        return String.format("% deleted successfully", "Event");
+    }
 }

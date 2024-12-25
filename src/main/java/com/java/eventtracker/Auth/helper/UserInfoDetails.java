@@ -1,6 +1,6 @@
 package com.java.eventtracker.Auth.helper;
 
-import com.java.eventtracker.users.model.Users;
+import com.java.eventtracker.users.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ public class UserInfoDetails implements UserDetails {
      *
      * @param userInfo The user info of the users
      */
-    public UserInfoDetails(Users userInfo) {
+    public UserInfoDetails(User userInfo) {
         this.email = userInfo.getEmail();
         this.password = userInfo.getPassword();
         this.authorities = List.of(userInfo.getRoles().split(","))

@@ -1,9 +1,8 @@
 package com.java.eventtracker.Auth.helper;
 
-import com.java.eventtracker.users.model.Users;
+import com.java.eventtracker.users.model.User;
 import com.java.eventtracker.users.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +18,7 @@ public class UserInfoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> userDetail = usersRepository.findByEmail(username); // Assuming 'email' is used as username
+        Optional<User> userDetail = usersRepository.findByEmail(username); // Assuming 'email' is used as username
 
         // Converting UserInfo to UserDetails
         return userDetail.map(UserInfoDetails::new)

@@ -3,7 +3,7 @@ package com.java.eventtracker.Auth.controller;
 
 import com.java.eventtracker.Auth.model.AuthRequest;
 import com.java.eventtracker.Auth.service.AuthenticationService;
-import com.java.eventtracker.users.model.Users;
+import com.java.eventtracker.users.model.User;
 import com.java.eventtracker.users.service.UsersService;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
@@ -53,13 +53,13 @@ public class AuthenticationController {
     /**
      * Signing up the new user.
      *
-     * @param users The entity to be saved.
+     * @param user The entity to be saved.
      * @return The saved entity.
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<RestResponse> save(@Validated @RequestBody Users users) {
+    public ResponseEntity<RestResponse> save(@Validated @RequestBody User user) {
         Map<String, Object> listHashMap = new HashMap<>();
-        listHashMap.put("user", usersService.save(users));
+        listHashMap.put("user", usersService.save(user));
         return RestHelper.responseSuccess(listHashMap);
     }
 }

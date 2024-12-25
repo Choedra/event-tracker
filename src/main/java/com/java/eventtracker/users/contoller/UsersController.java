@@ -1,7 +1,7 @@
 package com.java.eventtracker.users.contoller;
 
 
-import com.java.eventtracker.users.model.Users;
+import com.java.eventtracker.users.model.User;
 import com.java.eventtracker.users.service.UsersService;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
@@ -23,13 +23,13 @@ public class UsersController {
     /**
      * Signing up the new user.
      *
-     * @param users The entity to be saved.
+     * @param user The entity to be saved.
      * @return The saved entity.
      */
     @PostMapping
-    public ResponseEntity<RestResponse> save(@Validated @RequestBody Users users) {
+    public ResponseEntity<RestResponse> save(@Validated @RequestBody User user) {
         HashMap<String, Object> listHashMap = new HashMap<>();
-        listHashMap.put("users", usersService.save(users));
+        listHashMap.put("users", usersService.save(user));
         return RestHelper.responseSuccess(listHashMap);
     }
 
