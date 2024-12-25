@@ -2,9 +2,8 @@ package com.java.eventtracker.users.service;
 
 import com.java.eventtracker.Auth.helper.UserInfoDetails;
 import com.java.eventtracker.users.mapper.UsersMapper;
-import com.java.eventtracker.utils.constants.UserConstants;
-import com.java.eventtracker.users.model.Users;
-import com.java.eventtracker.users.model.UsersDTO;
+import com.java.eventtracker.users.model.User;
+import com.java.eventtracker.users.model.UserDTO;
 import com.java.eventtracker.users.repository.UsersRepository;
 import com.java.eventtracker.utils.exception.GlobalExceptionWrapper;
 import lombok.NonNull;
@@ -29,34 +28,34 @@ public class UsersService implements IUsersService{
     private UsersRepository usersRepository;
 
     @Override
-    public List<UsersDTO> findAll() {
-        List<Users> users = this.usersRepository.findAll();
+    public List<UserDTO> findAll() {
+        List<User> users = this.usersRepository.findAll();
         return UsersMapper.toDTO(users);
     }
 
     @Override
-    public UsersDTO save(@NonNull Users users) {
+    public UserDTO save(@NonNull User user) {
         //Check if same user already exists during signup
-        if (usersRepository.existsByEmail(users.getEmail())) {
+        if (usersRepository.existsByEmail(user.getEmail())) {
             throw new GlobalExceptionWrapper.BadRequestException(DUPLICATE_EMAIL_MESSAGE);
         }
 
-        users.setPassword(encoder.encode(users.getPassword()));
-        users.setRoles("USER");
-        Users savedUsers = this.usersRepository.save(users);
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setRoles("USER");
+        User savedUser = this.usersRepository.save(user);
 
-        return UsersMapper.toDTO(savedUsers);
+        return UsersMapper.toDTO(savedUser);
     }
 
     @Override
-    public UsersDTO findById(long id) {
-        Users users = this.usersRepository.findById(id).orElseThrow(
+    public UserDTO findById(long id) {
+        User user = this.usersRepository.findById(id).orElseThrow(
                 () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE, USERS.toLowerCase())));
-        return UsersMapper.toDTO(users);
+        return UsersMapper.toDTO(user);
     }
 
     @Override
-    public String update(long id, Users entity) {
+    public String update(long id, User entity) {
         return "";
     }
 
@@ -67,15 +66,15 @@ public class UsersService implements IUsersService{
 
 
     @Override
-    public UsersDTO fetchSelfInfo() {
+    public UserDTO fetchSelfInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((UserInfoDetails) authentication.getPrincipal()).getUsername();
         return  findByEmail(email).orElseThrow(
                 () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE, USERS.toLowerCase())));
     }
 
-    public Optional<UsersDTO> findByEmail(@NonNull String emailId) {
-        Optional<Users> user = this.usersRepository.findByEmail(emailId);
+    public Optional<UserDTO> findByEmail(@NonNull String emailId) {
+        Optional<User> user = this.usersRepository.findByEmail(emailId);
         return UsersMapper.toDTO(user);
     }
 }

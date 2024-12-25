@@ -1,7 +1,7 @@
 package com.java.eventtracker.users.mapper;
 
-import com.java.eventtracker.users.model.Users;
-import com.java.eventtracker.users.model.UsersDTO;
+import com.java.eventtracker.users.model.User;
+import com.java.eventtracker.users.model.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +14,12 @@ public class UsersMapper {
     /**
      * Maps the users to users dto.
      *
-     * @param users The user entity.
+     * @param user The user entity.
      * @return Returns the user entity.
      */
-    public static UsersDTO toDTO(Users users) {
-        UsersDTO dto = new UsersDTO();
-        BeanUtils.copyProperties(users, dto, "password");
+    public static UserDTO toDTO(User user) {
+        UserDTO dto = new UserDTO();
+        BeanUtils.copyProperties(user, dto, "password");
         return dto;
     }
 
@@ -29,7 +29,7 @@ public class UsersMapper {
      * @param users The list of user entity.
      * @return The list of users dto.
      */
-    public static List<UsersDTO> toDTO(List<Users> users) {
+    public static List<UserDTO> toDTO(List<User> users) {
         return users.stream()
                 .map(UsersMapper::toDTO)
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class UsersMapper {
      * @param users The user entity.
      * @return The optional user dto.
      */
-    public static Optional<UsersDTO> toDTO(Optional<Users> users) {
+    public static Optional<UserDTO> toDTO(Optional<User> users) {
         return users.map(UsersMapper::toDTO);
     }
 
@@ -51,9 +51,9 @@ public class UsersMapper {
      * @param dto The users dto.
      * @return The user entity.
      */
-    public static Users toEntity(UsersDTO dto) {
-        Users users = new Users();
-        BeanUtils.copyProperties(dto, users);
-        return users;
+    public static User toEntity(UserDTO dto) {
+        User user = new User();
+        BeanUtils.copyProperties(dto, user);
+        return user;
     }
 }

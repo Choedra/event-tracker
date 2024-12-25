@@ -1,12 +1,8 @@
 package com.java.eventtracker.events.model;
 
-import com.java.eventtracker.users.model.Users;
+import com.java.eventtracker.users.model.User;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,6 +13,7 @@ public class Events {
     private Long id;
 
     private String title;
+
     private String description;
 
     @Column(name = "event_date")  // Column name in the database
@@ -24,7 +21,7 @@ public class Events {
 
     @ManyToOne
     @JoinColumn(name = "user_Id", nullable = false) // Ensure this matches your database schema
-    private Users users;
+    private User user;
 
     public Long getId() {
         return id;
@@ -58,11 +55,19 @@ public class Events {
         this.eventDate = eventDate;
     }
 
-    public Users getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

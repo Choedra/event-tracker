@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +19,7 @@ public class EventsDTO {
 
     private String title; // Title of the event
     private String description; // Description of the event
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime eventDate; // Date and time of the event
+    private Date eventDate; // Date and time of the event
 
     private long userId; // User associated with the event
 }
