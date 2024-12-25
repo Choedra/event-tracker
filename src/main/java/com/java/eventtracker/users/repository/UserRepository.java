@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
 
     /**
      * Fetches the users information by email id

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class UsersMapper {
+public class UserMapper {
     /**
      * Maps the users to users dto.
      *
@@ -31,7 +31,7 @@ public class UsersMapper {
      */
     public static List<UserDTO> toDTO(List<User> users) {
         return users.stream()
-                .map(UsersMapper::toDTO)
+                .map(UserMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -42,7 +42,7 @@ public class UsersMapper {
      * @return The optional user dto.
      */
     public static Optional<UserDTO> toDTO(Optional<User> users) {
-        return users.map(UsersMapper::toDTO);
+        return users.map(UserMapper::toDTO);
     }
 
     /**

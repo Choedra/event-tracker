@@ -2,7 +2,7 @@ package com.java.eventtracker.users.contoller;
 
 
 import com.java.eventtracker.users.model.User;
-import com.java.eventtracker.users.service.UsersService;
+import com.java.eventtracker.users.service.UserServiceImpl;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class UsersController {
 
     @Autowired
-    private UsersService usersService;
+    private UserServiceImpl userServiceImpl;
 
     /**
      * Signing up the new user.
@@ -29,7 +29,7 @@ public class UsersController {
     @PostMapping
     public ResponseEntity<RestResponse> save(@Validated @RequestBody User user) {
         HashMap<String, Object> listHashMap = new HashMap<>();
-        listHashMap.put("users", usersService.save(user));
+        listHashMap.put("users", userServiceImpl.save(user));
         return RestHelper.responseSuccess(listHashMap);
     }
 
@@ -44,14 +44,14 @@ public class UsersController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<RestResponse> findById(@PathVariable long id) {
         HashMap<String, Object> listHashMap = new HashMap<>();
-        listHashMap.put("users", usersService.findById(id));
+        listHashMap.put("users", userServiceImpl.findById(id));
         return RestHelper.responseSuccess(listHashMap);
     }
 
     // Delete user by ID
     @DeleteMapping("/{id}")
     public String deleteUserById(@PathVariable Long id) {
-        usersService.deleteById(id);
+        userServiceImpl.deleteById(id);
         return "User with ID " + id + " has been deleted successfully.";
     }
 
@@ -64,7 +64,7 @@ public class UsersController {
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     public ResponseEntity<RestResponse> fetchSelfInfo() {
         HashMap<String, Object> listHashMap = new HashMap<>();
-        listHashMap.put("users", usersService.fetchSelfInfo());
+        listHashMap.put("users", userServiceImpl.fetchSelfInfo());
         return RestHelper.responseSuccess(listHashMap);
     }
 }

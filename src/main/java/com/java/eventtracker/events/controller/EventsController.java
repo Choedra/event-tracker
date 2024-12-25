@@ -3,8 +3,6 @@ package com.java.eventtracker.events.controller;
 import com.java.eventtracker.events.model.Events;
 import com.java.eventtracker.events.model.EventsDTO;
 import com.java.eventtracker.events.service.EventsService;
-import com.java.eventtracker.users.service.IUsersService;
-import com.java.eventtracker.users.service.UsersService;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;

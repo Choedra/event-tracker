@@ -1,6 +1,7 @@
 package com.java.eventtracker.users.model;
 
 
+import com.java.eventtracker.utils.AuditEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "users")
-public class User {
+public class User extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQUENCE")
     private long id;
