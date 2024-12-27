@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -77,10 +78,17 @@ public class EventsController {
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<String> updateEvent(@PathVariable long eventId,
-                                              @Validated @RequestBody Events eventDetails) {
+    public ResponseEntity<Map<String, String>> updateEvent(@PathVariable long eventId,
+                                                           @Validated @RequestBody Events eventDetails) {
         String result = eventService.update(eventId, eventDetails);
-        return ResponseEntity.ok(result);
+
+        // Return a JSON response with the result message
+        Map<String, String> response = new HashMap<>();
+        response.put("message", result);
+
+        return ResponseEntity.ok(response);
     }
+
+
 
 }
