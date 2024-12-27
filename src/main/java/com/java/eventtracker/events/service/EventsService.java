@@ -67,17 +67,15 @@ public class EventsService implements IEventService{
         Events existingEvent = eventRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found with ID: " + id));
 
-        // Check if user is provided and is valid
-        if (updatedEvent.getUser() != null ) {
-            // Fetch the User entity from the database using the user ID
-            UserDTO user = usersService.findById(updatedEvent.getUser().getId());
-            User selectedUser = UserMapper.toEntity(user);
-
-            // Set the valid user in the existing event
-            existingEvent.setUser(selectedUser);
-        } else {
-            throw new IllegalArgumentException("User cannot be null or invalid for event update");
+        // Fetch the authenticated user (instead of receiving it with the payload)
+        UserDTO user = usersService.fetchSelfInfo();
+        if (user == null) {
+            throw new IllegalArgumentException("Authenticated user not found");
         }
+
+        // Set the authenticated user in the existing event
+        User selectedUser = UserMapper.toEntity(user);
+        existingEvent.setUser(selectedUser);
 
         // Update the other fields of the existing event
         existingEvent.setTitle(updatedEvent.getTitle());
