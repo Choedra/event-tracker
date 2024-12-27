@@ -12,12 +12,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Table(name = "users")
 public class User extends AuditEntity {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQUENCE")
+//    private long id;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQUENCE")
-    private long id;
+    private Long id; // Change from long to Long
+
+
 
     @NotBlank(message = "Username is required and cannot be empty")
     @Column(unique = true)
