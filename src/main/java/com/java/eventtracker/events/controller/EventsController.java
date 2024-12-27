@@ -5,6 +5,7 @@ import com.java.eventtracker.events.model.EventsDTO;
 import com.java.eventtracker.events.service.EventsService;
 import com.java.eventtracker.utils.RestHelper;
 import com.java.eventtracker.utils.RestResponse;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -73,6 +74,13 @@ public class EventsController {
         HashMap<String, Object> response = new HashMap<>();
         response.put("events", events);
         return RestHelper.responseSuccess(response);
+    }
+
+    @PutMapping("/{eventId}")
+    public ResponseEntity<String> updateEvent(@PathVariable long eventId,
+                                              @Validated @RequestBody Events eventDetails) {
+        String result = eventService.update(eventId, eventDetails);
+        return ResponseEntity.ok(result);
     }
 
 }

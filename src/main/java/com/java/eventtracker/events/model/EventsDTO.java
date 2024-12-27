@@ -21,5 +21,6 @@ public class EventsDTO {
     private String description; // Description of the event
     private Date eventDate; // Date and time of the event
 
+
     private long userId; // User associated with the event
 }
